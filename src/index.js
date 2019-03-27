@@ -28,10 +28,8 @@ app.use(cors());
 app.use(morgan('combined'));
 
 // endpoint to return all to-dos
-app.get('/', (req, res) => {
-  setTimeout(async () => {
-    res.send(await getToDos());
-  }, 0);
+app.get('/', async (req, res) => {
+  res.send(await getToDos());
 });
 
 const checkJwt = jwt({
