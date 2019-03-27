@@ -2,7 +2,6 @@
 
 To learn how to develop APIs similar to this one, check this article: https://auth0.com/blog/node-js-and-express-tutorial-building-and-securing-restful-apis/
 
-
 ## Running
 
 To run this sample, you can either use Docker to decouple the server from the host machine, or you can use Node.js and NPM. Fell free to choose whatever suits you better.
@@ -22,6 +21,15 @@ npm install
 npm start
 ```
 
+### Running with Docker
+
+There is [an image on Docker Hub](https://cloud.docker.com/u/auth0blog/repository/docker/auth0blog/to-dos-api-express) that you can use. To run it, issue the following command:
+
+```bash
+docker run -p 3001:3001 -d auth0blog/to-dos-api-express
+```
+
+This will run the project on a Docker container and expose the API on port `3001` on the host. Feel free to adjust these setting to your needs.
 
 ## Consuming the API
 
