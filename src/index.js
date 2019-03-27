@@ -9,8 +9,6 @@ const morgan = require('morgan');
 const {startDatabase} = require('./database/mongo');
 const {insertToDo, getToDos} = require('./database/to-dos');
 const {deleteToDo, updateToDo} = require('./database/to-dos');
-const jwt = require('express-jwt');
-const jwksRsa = require('jwks-rsa');
 
 // defining the Express app
 const app = express();
@@ -32,25 +30,8 @@ app.get('/', async (req, res) => {
   res.send(await getToDos());
 });
 
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://blog-samples.auth0.com/.well-known/jwks.json`
-  }),
-
-  // Validate the audience and the issuer.
-  audience: 'https://to-dos-api',
-  issuer: `https://blog-samples.auth0.com/`,
-  algorithms: ['RS256']
-});
-
-app.use(checkJwt);
-
 app.post('/', async (req, res) => {
   const newToDo = req.body;
-  newToDo.subject = req.user.sub;
   await insertToDo(newToDo);
   res.send({ message: 'New to-do inserted.' });
 });
