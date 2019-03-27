@@ -72,7 +72,7 @@ app.put('/:id', async (req, res) => {
 
 // start the in-memory MongoDB instance
 startDatabase().then(async () => {
-  await insertToDo({title: 'Hello, now from the in-memory database!'});
+  await insertToDo({message: 'Hi, friend. Share you thoughts!😊'});
 
   // start the server
   app.listen(3001, async () => {
