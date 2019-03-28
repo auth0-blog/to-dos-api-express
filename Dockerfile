@@ -16,11 +16,10 @@ RUN npm install
 COPY . .
 
 # env variables (with default value)
-ARG AUTH0_DOMAIN=blog-samples.auth0.com
 ENV AUTH0_DOMAIN=$AUTH0_DOMAIN
-
-ARG AUTH0_API=https://to-dos-api
 ENV AUTH0_API=$AUTH0_API
+ENV AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID
+ENV AUTH0_CLIENT_SECRET=$AUTH0_CLIENT_SECRET
 
 EXPOSE 3001
 CMD [ "npm", "start" ]
