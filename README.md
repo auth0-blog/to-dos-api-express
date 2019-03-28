@@ -26,7 +26,12 @@ npm start
 There is [an image on Docker Hub](https://cloud.docker.com/u/auth0blog/repository/docker/auth0blog/to-dos-api-express) that you can use. To run it, issue the following command:
 
 ```bash
-docker run -p 3001:3001 -d auth0blog/to-dos-api-express
+docker run \
+  -p 3001:3001 \
+  -e "AUTH0_DOMAIN=bk-samples.auth0.com" \
+  -e "AUTH0_API=https://to-dos-rest-api" \
+  --name to-dos \
+  -d auth0blog/to-dos-api-express:auth0
 ```
 
 This will run the project on a Docker container and expose the API on port `3001` on the host. Feel free to adjust these setting to your needs.

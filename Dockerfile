@@ -15,5 +15,12 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+# env variables (with default value)
+ARG AUTH0_DOMAIN=blog-samples.auth0.com
+ENV AUTH0_DOMAIN=$AUTH0_DOMAIN
+
+ARG AUTH0_API=https://to-dos-api
+ENV AUTH0_API=$AUTH0_API
+
 EXPOSE 3001
 CMD [ "npm", "start" ]
