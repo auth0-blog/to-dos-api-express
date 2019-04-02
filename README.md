@@ -44,3 +44,13 @@ curl -X POST -H 'Content-Type: application/json' -d '{
   "message": "Buy some yummy pizza!"
 }' http://localhost:3001/
 ```
+
+## Updating the Docker Image
+
+```bash
+# build the image
+docker build -t auth0blog/to-dos-api-express .
+
+# push the new version
+docker push auth0blog/to-dos-api-express
+```
