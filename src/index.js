@@ -28,70 +28,10 @@ app.use(cors());
 // adding morgan to log HTTP requests
 app.use(morgan('combined'));
 
-let accessToken = null;
-
-async function getManagementAccessToken() {
-  if (!accessToken) {
-    const options = {
-      method: 'POST',
-      url: `https://${process.env.AUTH0_DOMAIN}/oauth/token`,
-      headers: { 'content-type': 'application/json' },
-      body: `{
-        "client_id": "${process.env.AUTH0_CLIENT_ID}",
-        "client_secret": "${process.env.AUTH0_CLIENT_SECRET}",
-        "audience": "https://${process.env.AUTH0_DOMAIN}/api/v2/",
-        "grant_type": "client_credentials"
-      }`,
-    };
-
-    const response = await request(options);
-    accessToken = JSON.parse(response)['access_token'];
-  }
-
-  return accessToken;
-}
-
-async function queryUsersById(queryIds, retry) {
-  const options = {
-    method: 'GET',
-    url: `https://${process.env.AUTH0_DOMAIN}/api/v2/users`,
-    qs: { q: `user_id:("${queryIds}")`, search_engine: 'v3' },
-    headers: { authorization: `Bearer ${await getManagementAccessToken()}` },
-  };
-
-  try {
-    return JSON.parse(await request(options));
-  } catch (error) {
-    accessToken = null;
-    if (retry) {
-      return queryUsersById(queryIds, false);
-    }
-    throw error;
-  }
-}
-
 // endpoint to return all to-dos
 app.get('/', async (req, res) => {
   const toDos = await getToDos();
-  const userIdsWithDuplicates = toDos.map((toDo) => toDo.userId);
-  const userIds = [...new Set(userIdsWithDuplicates)];
-  const queryIds = userIds.join('" OR "');
-
-  const users = await queryUsersById(queryIds, true);
-  res.send(toDos.map(toDo => {
-    let user = users.find((user) => (user['user_id'] === toDo.userId));
-    if (!user) user = {
-      user_id: 'unknown',
-      name: 'unknown',
-      nickname: 'unknown',
-      picture: 'https://s.gravatar.com/avatar/d1ad971613b01e221226aa2f4700267a?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fuk.png',
-      email: 'unknown',
-    };
-    return {
-      ...toDo,
-      user,
-    };
-  }));
+  res.send(toDos);
 });
 
 const checkJwt = jwt({
@@ -137,8 +77,6 @@ startDatabase().then(async () => {
   // start the server
   app.listen(3001, async () => {
     console.log('running with the following env vars:');
-    console.log(process.env.AUTH0_CLIENT_ID);
-    console.log(process.env.AUTH0_CLIENT_SECRET);
     console.log(process.env.AUTH0_DOMAIN);
     console.log(process.env.AUTH0_API);
     console.log('listening on port 3001');

@@ -18,10 +18,8 @@ cd to-do-apis
 npm install
 
 # define your own env variables
-export AUTH0_DOMAIN=...
-export AUTH0_API=...
-export AUTH0_CLIENT_ID=...
-export AUTH0_CLIENT_SECRET=...
+export AUTH0_DOMAIN=blog-samples.auth0.com
+export AUTH0_API=https://to-do-apis
 
 # run the application
 npm start
@@ -34,15 +32,11 @@ There is [an image on Docker Hub](https://cloud.docker.com/u/auth0blog/repositor
 ```bash
 AUTH0_DOMAIN=...
 AUTH0_API=...
-AUTH0_CLIENT_ID=...
-AUTH0_CLIENT_SECRET=...
 
 docker run \
   -p 3001:3001 \
   -e "AUTH0_DOMAIN="$AUTH0_DOMAIN \
   -e "AUTH0_API="$AUTH0_API \
-  -e "AUTH0_CLIENT_ID="$AUTH0_CLIENT_ID \
-  -e "AUTH0_CLIENT_SECRET="$AUTH0_CLIENT_SECRET \
   --name to-dos \
   -d auth0blog/to-dos-api-express:auth0
 ```
