@@ -132,7 +132,7 @@ app.put('/:id', async (req, res) => {
 
 // start the in-memory MongoDB instance
 startDatabase().then(async () => {
-  await insertToDo({message: 'Hi, friend. Share you thoughts!😊'});
+  await insertToDo({message: 'Buy pizza!'});
 
   // start the server
   app.listen(3001, async () => {
