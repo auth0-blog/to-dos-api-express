@@ -1,8 +1,8 @@
-const { getDatabase } = require("./mongo");
-const { ObjectID } = require("mongodb");
-const { paginate } = require("./../helper");
+const { getDatabase } = require('./mongo');
+const { ObjectID } = require('mongodb');
+const { paginate } = require('./../helper');
 
-const collectionName = "to-dos";
+const collectionName = 'to-dos';
 
 async function insertToDo(toDo) {
   const database = await getDatabase();
