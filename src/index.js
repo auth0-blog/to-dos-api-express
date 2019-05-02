@@ -51,11 +51,7 @@ app.put("/:id", async (req, res) => {
 
 // start the in-memory MongoDB instance
 startDatabase().then(async () => {
-  //await insertToDo({message: 'Buy pizza!'});
-  for (let index = 0; index < 2000; index++) {
-    //const element = array[index];
-    await insertToDo({ message: "Buy pizza!" + index });
-  }
+  await insertToDo({ message: "Buy pizza!" });
 
   // start the server
   app.listen(3001, async () => {
