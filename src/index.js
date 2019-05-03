@@ -27,7 +27,9 @@ app.use(morgan('combined'));
 
 // endpoint to return all to-dos
 app.get('/', async (req, res) => {
-  res.send(await getToDos(req));
+  const perPage = parseInt(req.query.per_page || 20);
+  const currentPage = parseInt(req.query.page || 1);
+  res.send(await getToDos(perPage, currentPage));
 });
 
 app.post('/', async (req, res) => {

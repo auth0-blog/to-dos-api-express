@@ -1,6 +1,5 @@
 const { getDatabase } = require('./mongo');
 const { ObjectID } = require('mongodb');
-const { paginate } = require('./../helper');
 
 const collectionName = 'to-dos';
 
@@ -12,19 +11,16 @@ async function insertToDo(toDo) {
   return insertedId;
 }
 
-async function getToDos(req) {
+async function getToDos(perPage, currentPage) {
   const database = await getDatabase();
-  const perPage = parseInt(req.query.per_page ? req.query.per_page : 20);
-  const rawData = database.collection(collectionName);
-  const currentPage = parseInt(req.query.page ? req.query.page : 1);
-  const total = await rawData.countDocuments();
-  const meta = paginate(perPage, currentPage, total);
-  const data = await rawData
+  const nextSet = perPage * (currentPage - 1 > 0 ? currentPage - 1 : 0); // checks for -ve page value
+  const data = await database
+    .collection(collectionName)
     .find({})
-    .skip(meta.nextSet)
+    .skip(nextSet)
     .limit(perPage)
     .toArray();
-  return { data, meta };
+  return data;
 }
 
 async function deleteToDo(id) {
