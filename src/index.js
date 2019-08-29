@@ -9,8 +9,7 @@ const morgan = require('morgan');
 const { startDatabase } = require('./database/mongo');
 const { insertToDo, getToDos } = require('./database/to-dos');
 const { deleteToDo, updateToDo } = require('./database/to-dos');
-const fs = require('fs');
-const path = require('path');
+const todos = require('./todo');
 
 // defining the Express app
 const app = express();
@@ -55,11 +54,8 @@ app.put('/:id', async (req, res) => {
 
 // start the in-memory MongoDB instance
 startDatabase().then(async () => {
-  var todos = fs.readFileSync('src/todo.json', 'utf8');
-  var parsedJson = JSON.parse(todos);
-
-  await parsedJson.data.map(message => {
-    insertToDo(message);
+  await todos.map(message => {
+    insertToDo({ message });
   });
 
   // start the server
