@@ -6,9 +6,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const {startDatabase} = require('./database/mongo');
-const {insertToDo, getToDos} = require('./database/to-dos');
-const {deleteToDo, updateToDo} = require('./database/to-dos');
+const { startDatabase } = require('./database/mongo');
+const { insertToDo, getToDos } = require('./database/to-dos');
+const { deleteToDo, updateToDo } = require('./database/to-dos');
+const todos = require('./todo');
 
 // defining the Express app
 const app = express();
@@ -27,7 +28,9 @@ app.use(morgan('combined'));
 
 // endpoint to return all to-dos
 app.get('/', async (req, res) => {
-  res.send(await getToDos());
+  const perPage = parseInt(req.query.per_page || 20);
+  const currentPage = parseInt(req.query.page || 1);
+  res.send(await getToDos(perPage, currentPage));
 });
 
 app.post('/', async (req, res) => {
@@ -51,7 +54,9 @@ app.put('/:id', async (req, res) => {
 
 // start the in-memory MongoDB instance
 startDatabase().then(async () => {
-  await insertToDo({message: 'Buy pizza!'});
+  await todos.map(message => {
+    insertToDo({ message });
+  });
 
   // start the server
   app.listen(3001, async () => {
